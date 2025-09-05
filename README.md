@@ -19,4 +19,12 @@ launch  an  online  video  rental  service  in  order  to  stay  competitive. Th
 
 **Tools Used :-**
 
-PostgreSQL :Relational Database management system
+PostgreSQL :Relational Database management system used to store and query Rockbuster's data
+PgAdmin4 : User friendly interface to simplify the management of PostgreSQL databases
+Tableau Public platform: Free online platform for creating, exploring and sharing interactive data visualizations. 
+
+**Dataset Overview**
+
+The Dataset used for this analysis contains information about Rockbuster's film inventory, customers information, payment informations, Store information etc. 
+
+
