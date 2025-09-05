@@ -1,0 +1,109 @@
+SQL Query 1:- Get customer count and total payment received against each country
+							
+SELECT country,							
+       COUNT(DISTINCT A.customer_id) AS customer_count,							
+       SUM(amount) AS total_payment							
+FROM customer A							
+INNER JOIN address B ON A.address_id = B.address_id							
+INNER JOIN city C ON B.city_id = C.city_id							
+INNER JOIN country D ON C.country_ID = D.country_ID							
+INNER JOIN payment E ON a.customer_id = E.customer_id							
+GROUP BY country							
+ORDER BY total_payment DESC							
+
+
+SQL QUERY 2:- To find the top 10 Countries with highest number of customer count
+							
+SELECT D.country, COUNT(country) AS country_count							
+FROM customer A							
+INNER JOIN address B ON A.address_id = B.address_id							
+INNER JOIN city C ON B.city_id = C.city_id							
+INNER JOIN country D ON C.country_id = D.country_id							
+GROUP BY country							
+ORDER BY country_count DESC							
+LIMIT 10							
+							
+
+												
+SQL QUERY 3:- To find the top 5 Cities in the top 10 countries with higher customer count.
+												
+												
+SELECT C.city, D.country,												
+COUNT(customer_id) AS total_customer												
+FROM customer A												
+INNER JOIN address B ON A.address_id = B.address_id												
+INNER JOIN city C ON B.city_id = C.city_id												
+INNER JOIN country D ON C.country_id = D.country_id												
+WHERE country IN												
+(SELECT D.country 							-- To find the top 10 countries with higher customer count					
+		FROM customer A										
+		INNER JOIN address B ON A.address_id = B.address_id										
+		INNER JOIN city C ON B.city_id = C.city_id										
+		INNER JOIN country D ON C.country_id = D.country_id										
+		GROUP BY country										
+		ORDER BY COUNT(A.customer_id) DESC										
+		LIMIT 10)										
+GROUP BY country,city												
+ORDER BY total_customer DESC												
+LIMIT 10												
+												
+
+SQL Query 4:- To find the top 5 customers from the top 5 cities identified from the above query and the average amount spent.
+							
+SELECT A.customer_id, first_name, last_name, country, SUM(E.amount) AS total_amount  -- To find the total amount paid by the top 5 customers from the top 10 cities														
+FROM payment E														
+INNER JOIN customer A ON A.customer_id = E.customer_id														
+INNER JOIN address B ON A.address_id = B.address_id														
+INNER JOIN city C ON B.city_id = C.city_id														
+INNER JOIN country D ON C.country_id = D.country_id														
+WHERE city IN														
+	(SELECT C.city  								 -- to find the top 10 cities with higher customer count					
+	FROM customer A													
+	INNER JOIN address B ON A.address_id = B.address_id													
+	INNER JOIN city C ON B.city_id = C.city_id													
+	INNER JOIN country D ON C.country_id = D.country_id													
+	WHERE country IN													
+		(SELECT D.country 							-- To find the top 10 countries with higher customer count					
+		FROM customer A												
+		INNER JOIN address B ON A.address_id = B.address_id												
+		INNER JOIN city C ON B.city_id = C.city_id												
+		INNER JOIN country D ON C.country_id = D.country_id												
+		GROUP BY country												
+		ORDER BY COUNT(A.customer_id) DESC												
+		LIMIT 10)												
+	GROUP BY D.country, C.city													
+	ORDER BY COUNT(A.customer_id) DESC													
+	LIMIT 10)													
+GROUP BY A.customer_id, first_name, last_name,country														
+ORDER BY total_amount DESC														
+LIMIT 5														
+														
+
+SQL Query 5:- Top 10 high revenue generating movies and its category							
+						
+SELECT F.title, A.name, SUM(amount) AS total_revenue							
+FROM payment P							
+INNER JOIN rental R ON P.rental_id = R.rental_id							
+INNER JOIN inventory I ON R.inventory_id = I.inventory_id							
+INNER JOIN film F ON I.film_id = F.film_id							
+INNER JOIN film_category C ON f.film_id = C.film_id							
+INNER JOIN category A ON C.category_id = A.category_id							
+GROUP BY F.title, A.name							
+ORDER BY total_revenue DESC							
+LIMIT 10							
+							
+							
+SQL Query 6:- Least revenue generating movies and ist category							
+
+
+SELECT F.title, A.name, SUM(amount) AS total_revenue							
+FROM payment P							
+INNER JOIN rental R ON P.rental_id = R.rental_id							
+INNER JOIN inventory I ON R.inventory_id = I.inventory_id							
+INNER JOIN film F ON I.film_id = F.film_id							
+INNER JOIN film_category C ON f.film_id = C.film_id							
+INNER JOIN category A ON C.category_id = A.category_id							
+GROUP BY F.title, A.name							
+ORDER BY total_revenue ASC							
+LIMIT 10							
+							
